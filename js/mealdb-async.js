@@ -1,8 +1,8 @@
 /* add a spiner when the data load */
 
-document.getElementById('erroe-massage').style.display = 'none';
+/*  Alternative option of fetch is async + await */
 
-const searchFood = () => {
+const searchFood = async () => {
     const searchField = document.getElementById('search-field');
     const searchText = searchField.value;
     searchField.value = ''; // clear input field
@@ -13,18 +13,22 @@ const searchFood = () => {
     else {
         /* load Data */
         const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchText}`;
-        fetch(url)
-            .then(res => res.json())
-            .then(data => displayMeals(data.meals))
-            .catch(error => errorMassage(error));
+
+        try {
+            const res = await fetch(url);
+            const data = await res.json();
+            displayMeals(data.meals)
+        }
+        catch (error) {
+            console.log(error);
+        }
+
+        // fetch(url)
+        //     .then(res => res.json())
+        //     .then(data => displayMeals(data.meals))
     }
-}
 
-const errorMassage = () => {
-    document.getElementById('erroe-massage').style.display = 'block';
-    // document.getElementById('erroe-massage').innerText = error; // ?? solve the error massage browser shown
 }
-
 
 /* show meal list */
 const displayMeals = foods => {
@@ -55,11 +59,16 @@ const displayMeals = foods => {
 };
 
 /* Load Data Detail Meals */
-const mealDetails = (foodId) => {
+const mealDetails = async (foodId) => {
     const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${foodId}`;
-    fetch(url)
-        .then(res => res.json())
-        .then(data => displayMealsDetails(data.meals[0]))
+
+    const res = await fetch(url)
+    const data = await res.json()
+    displayMealsDetails(data.meals[0])
+
+    // fetch(url)
+    //     .then(res => res.json())
+    //     .then(data => displayMealsDetails(data.meals[0]))
 }
 
 /* Show meal details */
